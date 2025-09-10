@@ -1,0 +1,1 @@
+# strk-nostr-fixed-investment
