@@ -28,7 +28,7 @@ spec:
             - "--ethereum.url"
             - "$(ETHEREUM_URL)"
             - "--http-rpc"
-            - "9545"
+            - "0.0.0.0:9545"
           ports:
             - containerPort: 9545
           securityContext:
