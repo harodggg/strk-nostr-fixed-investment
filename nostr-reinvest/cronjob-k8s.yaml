@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-cronjob
+spec:
+  schedule: "0 * * * *" # 每天凌晨 0 点执行
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: nostra-reinvest
+              image: axelharold/nostr-reinvest:latest
+          restartPolicy: OnFailure
