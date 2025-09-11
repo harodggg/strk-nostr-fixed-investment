@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`pathfinder.xxxyyy.space`) # 路由匹配规则
+    - match: Host(`pathfinder.xxxyyy.space`) && PathPrefix(`/rpc/v0_9`) # 路由匹配规则
       kind: Rule
       services:
         - name: pathfinder-service # 流量要转发到的服务
