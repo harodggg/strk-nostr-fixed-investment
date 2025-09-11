@@ -24,6 +24,11 @@ spec:
       containers:
         - name: pathfinder
           image: eqlabs/pathfinder:latest
+          args:
+            - --ethereum.url
+            - $ETHEREUM_URL
+            - --http-rpc
+            - 9545
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
