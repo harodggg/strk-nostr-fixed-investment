@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pathfinder-ingressroute
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`pathfinder.xxxyyy.space`) # 路由匹配规则
+      kind: Rule
+      services:
+        - name: pathfinder-service # 流量要转发到的服务
+          port: 9545

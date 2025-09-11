@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pathfinder-service
+spec:
+  selector:
+    app: pathfinder-deployment
+  ports:
+    - protocol: TCP
+      port: 9545 # Service 自身监听的端口
+      targetPort: 9545 # 流量要路由到的 Pod 的容器端口
+  type: ClusterIP # Service 的类型，默认为 ClusterIP
