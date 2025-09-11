@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: my-global-config
+  name: x-global-config
 data:
   VALIDATOR_ATTESTATION_OPERATIONAL_PRIVATE_KEY: ""
 ---
@@ -25,7 +25,6 @@ spec:
         - name: attestation
           image: ghcr.io/eqlabs/starknet-validator-attestation
           args:
-            - ""
             - "--staking-contract-address 0x00ca1702e64c81d9a07b86bd2c540188d92a2c73cf5cc0e508d949015e7e84a7"
             - "--attestation-contract-address 0x10398fe631af9ab2311840432d507bf7ef4b959ae967f1507928f5afe888a99"
             - "--staker-operational-address 0x07366b7faf47122ca71f3cfab7044d67f536f6269666886a5f618dad3de745eb"
@@ -42,7 +41,7 @@ spec:
               mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
           envFrom:
             - configMapRef:
-                name: my-global-config
+                name: x-global-config
       volumes:
         - name: host-data-volume
           hostPath:
