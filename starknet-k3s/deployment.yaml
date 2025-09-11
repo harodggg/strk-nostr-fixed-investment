@@ -23,7 +23,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-        allowPrivilegeEscalation: true
       containers:
         - name: pathfinder
           image: eqlabs/pathfinder:latest
@@ -37,6 +36,7 @@ spec:
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
+            allowPrivilegeEscalation: true
           volumeMounts:
             - name: host-data-volume
               mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
