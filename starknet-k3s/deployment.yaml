@@ -34,6 +34,7 @@ spec:
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
+            fsGroup: 1000
           volumeMounts:
             - name: host-data-volume
               mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
