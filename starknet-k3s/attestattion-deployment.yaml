@@ -32,7 +32,7 @@ spec:
             - "--staker-operational-address"
             - "0x07366b7faf47122ca71f3cfab7044d67f536f6269666886a5f618dad3de745eb"
             - "--node-url"
-            - "http://pathfinder-service.default.svc.cluster.local/rpc/v0_9"
+            - "http://pathfinder.xxxyyy.space/rpc/v0_9"
             - "--local-signer"
           ports:
             - containerPort: 9545
@@ -40,14 +40,6 @@ spec:
             runAsUser: 0
             runAsGroup: 0
             allowPrivilegeEscalation: true
-          volumeMounts:
-            - name: host-data-volume
-              mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
           envFrom:
             - configMapRef:
                 name: x-global-config
-      volumes:
-        - name: host-data-volume
-          hostPath:
-            path: /root/pathfinder # 宿主机上的路径
-            type: DirectoryOrCreate

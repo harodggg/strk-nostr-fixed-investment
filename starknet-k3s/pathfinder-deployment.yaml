@@ -31,8 +31,7 @@ spec:
             - "$(ETHEREUM_URL)"
             - "--http-rpc"
             - "0.0.0.0:9545"
-            - "--ws-rpc"
-            - "0.0.0.0:9565"
+            - "--rpc.websocket.enabled"
           ports:
             - containerPort: 9545
             - containerPort: 9565
