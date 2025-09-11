@@ -22,7 +22,7 @@ spec:
         app: pathfinder-deployment
     spec:
       securityContext:
-        fsGroup: 1000
+        fsGroup: 0
       containers:
         - name: pathfinder
           image: eqlabs/pathfinder:latest
@@ -34,8 +34,8 @@ spec:
           ports:
             - containerPort: 9545
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
+            runAsUser: 0
+            runAsGroup: 0
             allowPrivilegeEscalation: true
           volumeMounts:
             - name: host-data-volume
