@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-global-config
+data:
+  VALIDATOR_ATTESTATION_OPERATIONAL_PRIVATE_KEY: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: attestation-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: attestation
+  template:
+    metadata:
+      labels:
+        app: attestation
+    spec:
+      securityContext:
+        fsGroup: 0
+      containers:
+        - name: attestation
+          image: ghcr.io/eqlabs/starknet-validator-attestation
+          args:
+            - ""
+            - "--staking-contract-address 0x00ca1702e64c81d9a07b86bd2c540188d92a2c73cf5cc0e508d949015e7e84a7"
+            - "--attestation-contract-address 0x10398fe631af9ab2311840432d507bf7ef4b959ae967f1507928f5afe888a99"
+            - "--staker-operational-address 0x07366b7faf47122ca71f3cfab7044d67f536f6269666886a5f618dad3de745eb"
+            - "--node-url http://pathfinder.xxxyyy.space/rpc/v0_9"
+            - "--local-signer"
+          ports:
+            - containerPort: 9545
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: true
+          volumeMounts:
+            - name: host-data-volume
+              mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
+          envFrom:
+            - configMapRef:
+                name: my-global-config
+      volumes:
+        - name: host-data-volume
+          hostPath:
+            path: /root/pathfinder # 宿主机上的路径
+            type: DirectoryOrCreate
