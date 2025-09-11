@@ -10,5 +10,6 @@ spec:
         spec:
           containers:
             - name: nostra-reinvest
+              imagePullPolicy: Always
               image: axelharold/nostr-reinvest:latest
           restartPolicy: OnFailure
