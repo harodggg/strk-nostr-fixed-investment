@@ -23,6 +23,7 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
+        allowPrivilegeEscalation: true
       containers:
         - name: pathfinder
           image: eqlabs/pathfinder:latest
