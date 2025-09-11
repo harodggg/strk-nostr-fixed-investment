@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-global-config
+data:
+  APP_NAME: "MyAwesomeApp"
+  LOG_LEVEL: "info"
+  ETHEREUM_URL: "https://fittest-autumn-shadow.quiknode.pro/66a3a6549fc591a6335749a88a04e1b0202ea335/"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathfinder-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pathfinder-deployment
+  template:
+    metadata:
+      labels:
+        app: pathfinder-deployment
+    spec:
+      containers:
+        - name: pathfinder
+          image: eqlabs/pathfinder:latest
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+          volumeMounts:
+            - name: host-data-volume
+              mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
+          envFrom:
+            - configMapRef:
+                name: my-global-config
+      volumes:
+        - name: host-data-volume
+          hostPath:
+            path: /root/pathfinder # 宿主机上的路径
+            type: DirectoryOrCreate
