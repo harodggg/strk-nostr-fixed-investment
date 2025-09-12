@@ -25,11 +25,6 @@ STARK_CONTRACT_ADDRESS = 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab0720185
 
 
 async def query_balance(address, coin_contract):
-    coin_contract = Contract(abi=ABI, provider=client, address=coin_contract)
-
-    call_result = await coin_contract.functions["balanceOf"].call(address)
-
-    print(f"{call_result}")
 
 
 async def main():
