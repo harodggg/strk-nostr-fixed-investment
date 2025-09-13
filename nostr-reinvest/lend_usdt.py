@@ -39,7 +39,7 @@ MY_ACCOUNT_KEY = {
 }
 
 
-async def swap_strk_to_usdt(amount) -> Union[str, bool]:
+async def lend_to_usdt(amount) -> Union[str, bool]:
     if amount <= 0:
         print("error：please input valid number and  > 0")
         return False
@@ -72,4 +72,4 @@ async def swap_strk_to_usdt(amount) -> Union[str, bool]:
     print(transaction_response)
 
 if __name__ == '__main__':
-    asyncio.run(swap_strk_to_usdt(0.1))
+    asyncio.run(lend_to_usdt(0.1))
