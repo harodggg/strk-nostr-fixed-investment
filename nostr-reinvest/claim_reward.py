@@ -1,6 +1,8 @@
 import asyncio
 import time
 
+import get_reward_information
+
 from starknet_py.contract import Contract
 from typing import Union
 from starknet_py.net.account.account import Account
@@ -15,19 +17,7 @@ from starknet_py.net.client_models import ResourceBounds, ResourceBoundsMapping
 FULLNODE_RPC = "http://pathfinder.xxxyyy.space/rpc/v0_9"
 client = FullNodeClient(node_url=FULLNODE_RPC)
 
-resource_bounds = ResourceBoundsMapping(
-    l1_gas=ResourceBounds(max_amount=int(1e5), max_price_per_unit=int(5e13)),
-    l2_gas=ResourceBounds(max_amount=int(1e10), max_price_per_unit=int(5e17)),
-    l1_data_gas=ResourceBounds(
-        max_amount=int(1e5), max_price_per_unit=int(5e13)
-    ),
-)
-
-the_lastlow_price = 100000  # 1str = 0.1usdt
-
-
 # nostr lend contract
-
 LEND_NOSTRA_CONTRACT = 0x0453c4c996f1047d9370f824d68145bd5e7ce12d00437140ad02181e1d11dc83
 
 STARK_CONTRACT = 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
@@ -40,32 +30,23 @@ MY_ACCOUNT_KEY = {
 }
 
 
-async def lend_to_usdt(amount) -> Union[str, bool]:
-    if amount <= 0:
-        print("error：please input valid number and  > 0")
-        return False
-
+async def claim_all(reward_infos):
     account = Account(
         address=MY_ACCOUNT_KEY["address"], client=client, key_pair=KeyPair.from_private_key(MY_ACCOUNT_KEY["private_key"]), chain=StarknetChainId.MAINNET)
-   # Create contract from contract's address - Contract will download contract's ABI to know its interface.
-    usdt_contract = await Contract.from_address(address=USDT_CONTRACT, provider=account)
 
-    nostra_lend_contract = await Contract.from_address(address=LEND_NOSTRA_CONTRACT, provider=account)
+    calls = []
+    for r in reward_infos:
+        # Create contract from contract's address - Contract will download contract's ABI to know its interface.
+        claim_contract = await Contract.from_address(address=r["rewardContract"], provider=account)
+        call = claim_contract.functions["claim"].prepare_invoke_v3(
+            int(r["reward"]), [bytes.fromhex(c.lstrip("0x")) for c in r["proofs"]])
+        calls.append(call)
 
-    invocation_approve = usdt_contract.functions["approve"].prepare_invoke_v3(
-        LEND_NOSTRA_CONTRACT, int(amount * pow(10, 6)))
-
-    invocation_lend = nostra_lend_contract.functions["mint"].prepare_invoke_v3(
-        MY_ACCOUNT_KEY['address'],
-        int(amount * pow(10, 6))
-
-    )
-
-    transaction_response = await account.execute_v3(
-        calls=[invocation_approve, invocation_lend],
-        auto_estimate=True
-    )
-    print(transaction_response)
+    # transaction_response = await account.execute_v3(
+    #    calls = calls,
+    #    auto_estimate = True
+    # )
+    print(calls)
 
 if __name__ == '__main__':
-    asyncio.run(lend_to_usdt(0.01))
+    asyncio.run(claim_all(get_reward_information.get_reward_infos()))
