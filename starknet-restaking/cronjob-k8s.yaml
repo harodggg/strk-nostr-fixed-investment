@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  PRIVATE_KEY: "MyAwesomeApp"
+  PUBLIC_KEY: "INFO"
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-nostra-invest-plan
+spec:
+  schedule: "0 * * * *" # 每天凌晨 0 点执行
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: nostra-reinvest
+              imagePullPolicy: Always
+              image: axelharold/nostr-reinvest:latest
+              envFrom:
+                - configMapRef:
+                    name: my-config
+          restartPolicy: OnFailure
