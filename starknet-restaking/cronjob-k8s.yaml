@@ -4,7 +4,7 @@ metadata:
   name: my-config
 data:
   PRIVATE_KEY: "MyAwesomeApp"
-  PUBLIC_KEY: "INFO"
+  ADDRESS: "INFO"
 ---
 apiVersion: batch/v1
 kind: CronJob
