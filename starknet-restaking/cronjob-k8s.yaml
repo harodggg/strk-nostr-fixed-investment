@@ -5,6 +5,7 @@ metadata:
 data:
   PRIVATE_KEY: "MyAwesomeApp"
   ADDRESS: "INFO"
+  OTHERADDRESS: ""
 ---
 apiVersion: batch/v1
 kind: CronJob

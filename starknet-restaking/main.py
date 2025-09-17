@@ -10,6 +10,8 @@ logger.info(f"PRIVATE_KEY: {PRIVATE_KEY}")
 ADDRESS = os.getenv(
     "ADDRESS", "you need to set a enviroment variable for address")
 logger.info(f"ADDRESS: {ADDRESS}")
+OTHERADDRESS = os.getenv(
+    "OTHERADDRESS", "you need to set a enviroment variable for other address")
 
 
 if __name__ == "__main__":
