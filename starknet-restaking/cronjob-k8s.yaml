@@ -9,7 +9,7 @@ data:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: job-nostra-invest-plan
+  name: starknet-restaking
 spec:
   schedule: "0 * * * *" # 每天凌晨 0 点执行
   jobTemplate:
@@ -17,9 +17,9 @@ spec:
       template:
         spec:
           containers:
-            - name: nostra-reinvest
+            - name: starknet-restaking
               imagePullPolicy: Always
-              image: axelharold/nostr-reinvest:latest
+              image: axelharold/starknet-restaking:latest
               envFrom:
                 - configMapRef:
                     name: my-config
