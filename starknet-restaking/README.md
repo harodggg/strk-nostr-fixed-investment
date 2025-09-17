@@ -1,3 +1,5 @@
+![](assets/2025-09-17-21-44-06.png)
+
 # 1. Deploy k3s cluster
 
 ```
