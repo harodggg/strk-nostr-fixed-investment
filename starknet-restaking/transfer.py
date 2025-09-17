@@ -15,7 +15,7 @@ FULLNODE_RPC = "http://pathfinder.xxxyyy.space/rpc/v0_9"
 client = FullNodeClient(node_url=FULLNODE_RPC)
 
 
-STARK_CONTRACT = 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
+STRK_CONTRACT = 0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d
 STAKING_CONTRACT = 0x00ca1702e64c81d9a07b86bd2c540188d92a2c73cf5cc0e508d949015e7e84a7
 
 MY_ACCOUNT_KEY = {
@@ -25,14 +25,16 @@ MY_ACCOUNT_KEY = {
 }
 
 
-async def claim_stark(MY_ACCOUNT_KEY):
+async def transfer_strk(MY_ACCOUNT_KEY, rec, amount):
     account = Account(
         address=MY_ACCOUNT_KEY["address"], client=client, key_pair=KeyPair.from_private_key(MY_ACCOUNT_KEY["private_key"]), chain=StarknetChainId.MAINNET)
 
-    claim_contract = await Contract.from_address(address=STAKING_CONTRACT, provider=account)
+    claim_contract = await Contract.from_address(address=STRK_CONTRACT, provider=account)
 
-    claim_invoke = claim_contract.functions["claim_rewards"].prepare_invoke_v3(
-        MY_ACCOUNT_KEY.address
+    claim_invoke = claim_contract.functions["transfer"].prepare_invoke_v3(
+        rec,
+        amount
+
     )
     transaction_response = await account.execute_v3(
         calls=[claim_invoke],
@@ -40,4 +42,4 @@ async def claim_stark(MY_ACCOUNT_KEY):
     )
 
 if __name__ == '__main__':
-    asyncio.run(claim_stark(MY_ACCOUNT_KEY))
+    asyncio.run(transfer_strk(MY_ACCOUNT_KEY, "l", 88))
