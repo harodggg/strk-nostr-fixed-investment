@@ -47,6 +47,5 @@ spec:
                 name: my-global-config
       volumes:
         - name: host-data-volume
-          hostPath:
-            path: /root/pathfinder # 宿主机上的路径
-            type: DirectoryOrCreate
+          peresistentVoumeClaim:
+            claimName: starknet-fullnode-data

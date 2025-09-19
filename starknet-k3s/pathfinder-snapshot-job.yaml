@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rclone-config
+data:
+  # 作为键值对存储
+  app_name: "my-application"
+  app_version: "2.0.0"
+  # 也可以存储完整的配置文件
+  rclone-config.conf: |
+    [pathfinder-snapshots]
+    type = s3
+    provider = Cloudflare
+    env_auth = false
+    access_key_id = 7635ce5752c94f802d97a28186e0c96d
+    secret_access_key = 529f8db483aae4df4e2a781b9db0c8a3a7c75c82ff70787ba2620310791c7821
+    endpoint = https://cbf011119e7864a873158d83f3304e27.r2.cloudflarestorage.com
+    acl = private
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: starknet-fullnode-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 600Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: download-and-process-job
+spec:
+  template:
+    spec:
+      volumes:
+        - name: rclone-config
+          configMap:
+            name: rclone-config
+        - name: fullnode-data
+          persistentVolumeClaim:
+            claimName: starknet-fullnode-data
+      containers:
+        - name: init-downloader
+          image: rclone/rclone:master
+          args:
+            - "--config=/data/rclone-config.conf"
+            - "copy"
+            - "-P"
+            - "pathfinder-snapshots:pathfinder-snapshots/mainnet_0.20.0_2199968.sqlite.zst"
+            - "/fullnode/snapshot.sqlite.zst"
+          volumeMounts:
+            - name: rclone-config
+              mountPath: /data
+            - name: fullnode-data
+              mountPath: /fullnode
+      restartPolicy: Never
