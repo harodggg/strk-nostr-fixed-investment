@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-global-config
+data:
+  rclone-config.yaml: |
+    [pathfinder-snapshots]
+    type = s3
+    provider = Cloudflare
+    env_auth = false
+    access_key_id = 7635ce5752c94f802d97a28186e0c96d
+    secret_access_key = 529f8db483aae4df4e2a781b9db0c8a3a7c75c82ff70787ba2620310791c7821
+    endpoint = https://cbf011119e7864a873158d83f3304e27.r2.cloudflarestorage.com
+    acl = private
+  ETHEREUM_URL: "https://fittest-autumn-shadow.quiknode.pro/66a3a6549fc591a6335749a88a04e1b0202ea335/"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathfinder-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pathfinder-deployment
+  template:
+    metadata:
+      labels:
+        app: pathfinder-deployment
+    spec:
+      securityContext:
+        fsGroup: 0
+      initContainers:
+        - name: download starknet snapshot
+          image:
+        - name: zstd snapshot archiment
+      containers:
+        - name: pathfinder
+          image: eqlabs/pathfinder:latest
+          args:
+            - "--ethereum.url"
+            - "$(ETHEREUM_URL)"
+            - "--http-rpc"
+            - "0.0.0.0:9545"
+            - "--rpc.websocket.enabled"
+          ports:
+            - containerPort: 9545
+            - containerPort: 9565
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: true
+          volumeMounts:
+            - name: host-data-volume
+              mountPath: /usr/share/pathfinder/data # 容器内的挂载路径
+          envFrom:
+            - configMapRef:
+                name: my-global-config
+      volumes:
+        - name: host-data-volume
+          hostPath:
+            path: /root/pathfinder # 宿主机上的路径
+            type: DirectoryOrCreate
