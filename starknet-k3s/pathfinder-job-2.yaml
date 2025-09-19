@@ -43,25 +43,16 @@ spec:
         - name: fullnode-data
           persistentVolumeClaim:
             claimName: starknet-fullnode-data
-      initContainers:
+      Containers:
         - name: init-downloader
           image: rclone/rclone:master
           args:
-            - "--config=/data/rclone-config.conf"
+            - "--config /data/rclone-config.conf"
             - "copy"
-            - "-P"
-            - "pathfinder-snapshots:pathfinder-snapshots/mainnet_0.20.0_2199968.sqlite.zst"
-            - "/fullnode/snapshot.sqlite.zst"
+            - "-P pathfinder-snapshots:pathfinder-snapshots/mainnet_0.20.0_2199968.sqlite.zst /fullnode/snapshot.sqlite.zst"
           volumeMounts:
             - name: rclone-config
               mountPath: /data
             - name: fullnode-data
               mountPath: /fullnode
-      containers:
-        - name: main-processor
-          image: danysk/zstd:latest
-          command: ["/usr/local/bin/zstd", "-T0", "-d", "/fullnode-data/snapshot.sqlite.zst", "-o", "/fullnode-data/mainnet.sqlite"]
-          volumeMounts:
-            - name: fullnode-data
-              mountPath: /fullnode-data
       restartPolicy: Never
