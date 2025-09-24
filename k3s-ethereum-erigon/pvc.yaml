@@ -1,0 +1,15 @@
+# erigon-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: erigon-pvc
+spec:
+  # 如果你的 PV 没有指定 storageClass，这里保持为空
+  storageClassName: "longhorn"
+  # 访问模式必须与 PV 匹配
+  accessModes:
+    - ReadWriteOnce
+  # 请求的存储容量必须小于或等于 PV 的容量
+  resources:
+    requests:
+      storage: 1Ti

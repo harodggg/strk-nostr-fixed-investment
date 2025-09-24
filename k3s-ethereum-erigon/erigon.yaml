@@ -1,0 +1,30 @@
+# 你的 Erigon Deployment YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: erigon-node
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: erigon
+  template:
+    metadata:
+      labels:
+        app: erigon
+    spec:
+      containers:
+        - name: erigon
+          image: "thorax/erigon:v2.58.0" # 使用你需要的 Erigon 镜像
+          args:
+            - --datadir=/var/lib/erigon # 确保数据目录指向挂载点
+            # 添加其他你需要的 Erigon 启动参数
+          # 在这里添加 volumeMounts
+          volumeMounts:
+            - name: erigon-data-storage # 这个名字要与 volumes 列表中的 name 匹配
+              mountPath: /var/lib/erigon # 关键步骤：将 PVC 挂载到 Erigon 的数据目录
+      # 在这里添加 volumes
+      volumes:
+        - name: erigon-data-storage # 这里为卷定义一个名字
+          persistentVolumeClaim:
+            claimName: erigon-pvc # 引用你创建的 PVC 的名称
