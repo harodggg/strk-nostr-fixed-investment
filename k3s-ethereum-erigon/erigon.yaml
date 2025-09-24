@@ -13,9 +13,11 @@ spec:
       labels:
         app: erigon
     spec:
+      securityContext:
+        fsGroup: 1001
       containers:
         - name: erigon
-          image: "thorax/erigon:v2.58.0" # 使用你需要的 Erigon 镜像
+          image: "erigontech/erigon:main-latest" # 使用你需要的 Erigon 镜像
           args:
             - --datadir=/var/lib/erigon # 确保数据目录指向挂载点
             # 添加其他你需要的 Erigon 启动参数
