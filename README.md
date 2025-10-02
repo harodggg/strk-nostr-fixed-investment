@@ -8,3 +8,8 @@
 - nostr-reinvest
 - strk-restaking
 - starknet-node-reward-claim-restarking
+
+# backup backend
+
+- [Minio](https://github.com/minio/minio)
+- [OpenList](https://github.com/OpenListTeam/OpenList)
