@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: k8s-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kuboard.guohongjie.asia`)
+      kind: Rule
+      services:
+        - name: kubernetes-dashboard-kong-proxy
+          port: 443
+          serversTransport: no-verify-tls
+  tls:
+    certResolver: myresolver
