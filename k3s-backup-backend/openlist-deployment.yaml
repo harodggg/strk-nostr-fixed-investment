@@ -30,7 +30,9 @@ spec:
           ports:
             - containerPort: 5244 # OpenList 默认端口
               name: http-port
-          # 挂载配置
+            - containerPort: 5246
+              name: s3-port
+          #  挂载配置
           volumeMounts:
             - name: openlist-data
               mountPath: /opt/openlist/data # OpenList 配置文件和数据默认路径

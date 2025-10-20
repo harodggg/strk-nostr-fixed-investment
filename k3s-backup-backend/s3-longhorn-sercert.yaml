@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: longhorn-minio-credentials
+  namespace: longhorn-system
+type: Opaque
+data:
+  # 以下是示例值，请替换为您自己的凭证（Base64编码后）
+  AWS_ACCESS_KEY_ID: JT1HFW4V9F1HQHGDCDYV # 示例: echo -n 'admin' | base64
+  AWS_SECRET_ACCESS_KEY: DQFcsGHaeSHgAJ1SdhPhOCYGUeptSzFkAyRQHkfz # 示例: echo -n 'adminadmin' | base64
+  AWS_ENDPOINTS: https://hel1.your-objectstorage.com # 示例: echo -n 'http://10
