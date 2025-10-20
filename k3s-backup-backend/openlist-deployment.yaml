@@ -16,9 +16,9 @@ spec:
         app: openlist
     spec:
       securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
       containers:
         - name: openlist
           # 使用 OpenList 官方 Docker 镜像，请替换为你想使用的版本标签
