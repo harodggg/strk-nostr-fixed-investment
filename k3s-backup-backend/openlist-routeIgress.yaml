@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: openlist-https-route
+  namespace: openlist # 确保与您的 OpenList Service 在同一个命名空间
+spec:
+  # 路由使用的 Traefik 安全入口点
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`openlist.guohongjie.asia`) # 替换为您的实际域名
+      kind: Rule
+      services:
+        - name: openlist-service # OpenList Service 的名称
+          port: 80 # OpenList Service 暴露的端口
+  # --- TLS 配置 ---
+  tls:
+    # 启用自动 TLS (Traefik 会使用配置的 ACME 证书解析器，例如 Let's Encrypt)
+    certResolver: myresolver # 替换为您的 Traefik ACME/TLS 配置中定义的解析器名称
+    # secretName: openlist-tls-cert # 也可以指定一个已有的 Secret 存储证书
